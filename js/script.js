@@ -1,34 +1,11 @@
-/*
-Treehouse Techdegree:
-FSJS Project 2 - Data Pagination and Filtering
-*/
-
-
-
-/*
-For assistance:
-   Check out the "Project Resources" section of the Instructions tab: https://teamtreehouse.com/projects/data-pagination-and-filtering#instructions
-   Reach out in your Slack community: https://treehouse-fsjs-102.slack.com/app_redirect?channel=unit-2
-*/
-
-
-
-/*
-Create the `showPage` function
-This function will create and insert/append the elements needed to display a "page" of nine students
-*/
 function showPage(list, page) {
    const itemsPerPage = 9;
-   // if (page === 5) {
-   //    itemsPerPage = list.length - (Math.floor(list.length / 9) * 9);
-   // }
    const startIndex = (page * itemsPerPage) - itemsPerPage;
    const endIndex = page * itemsPerPage;
-   let studentList = document.querySelector('ul.student-list');
+   const studentList = document.querySelector('ul.student-list');
    studentList.innerHTML = '';
 
    for (let i = startIndex; i < endIndex; i++) {
-      // console.log(i);
       if (list[i]){
          studentList.insertAdjacentHTML('beforeend', `<li class="student-item cf">
                                                         <div class="student-details">
@@ -42,42 +19,88 @@ function showPage(list, page) {
                                                       </li>`);
       }
    }
+   
 }
 
-/*
-Create the `addPagination` function
-This function will create and insert/append the elements needed for the pagination buttons
-*/
 function addPagination(list) {
-   // create a variable to calculate the number of pages needed
    const numOfPages = Math.ceil(list.length / 9);
-   // select the element with a class of `link-list` and assign it to a variable
-   let linkList = document.querySelector('ul.link-list');
-   // set the innerHTML property of the variable you just created to an empty string
+   const linkList = document.querySelector('ul.link-list');
    linkList.innerHTML = '';
-   // loop over the number of pages needed
-   // create the elements needed to display the pagination button
-   // insert the above elements
+
    for (let pageNum = 1; pageNum <= numOfPages; pageNum++){
-   linkList.insertAdjacentHTML('beforeend',`<li><button type="button">${pageNum}</button></li>`);
+      linkList.insertAdjacentHTML('beforeend',`<li><button type="button">${pageNum}</button></li>`);
    }
-   // give the first pagination button a class of "active"
+
    linkList.firstElementChild.firstElementChild.className = 'active';
-   // create an event listener on the `link-list` element
-   linkList.addEventListener('click', (event) => {
-      // if the click target is a button:
+   linkList.addEventListener('click', event => {
       if (event.target.tagName === 'BUTTON') {
-         // remove the "active" class from the previous button
-         let prevButton = document.querySelector('.active');
+         const prevButton = document.querySelector('.active');
          prevButton.className = '';
-         // add the active class to the clicked button
-         let button = event.target;
+         const button = event.target;
          button.className = 'active';
-         // call the showPage function passing the `list` parameter and page to display as arguments
          showPage(list, parseInt(button.textContent));
       }
    });
 }
-// Call functions
+
 showPage(data, 1);
 addPagination(data);
+
+const label = document.createElement('label');
+label.htmlFor = 'search';
+label.className = 'student-search';
+const input = document.createElement('input');
+input.id = 'search';
+input.placeholder = 'Search by name...';
+const button = document.createElement('button');
+button.type = 'button';
+const img = document.createElement('img');
+img.src='img/icn-search.svg';
+img.alt = 'Search icon';
+label.appendChild(input);
+button.appendChild(img);
+label.appendChild(button);
+document.querySelector('.header').appendChild(label);
+
+input.addEventListener('keyup', event => {
+   searchArr = [];
+   const searchVal = input.value.toLowerCase();
+
+   // this loop checks if key exists in the data array
+   for(let i = 0; i < data.length; i++){
+      // if search term does exist add to new array
+      const title = data[i].name.title.toLowerCase();
+      const first = data[i].name.first.toLowerCase();
+      const last = data[i].name.last.toLowerCase();
+      
+      // check for every acceptable search combination and add data object to new array
+      const titleFirst = title.concat(' ', first);
+      const titleFirstLast = titleFirst.concat(' ', last);
+      const firstLast = first.concat(' ', last);
+
+      if (title.includes(searchVal) || first.includes(searchVal) || last.includes(searchVal)) {
+         searchArr.push(data[i]);
+      } else if (titleFirst.includes(searchVal)) {
+         searchArr.push(data[i]);
+      } else if (titleFirstLast.includes(searchVal)) {
+         searchArr.push(data[i]);
+      } else if (firstLast.includes(searchVal)) {
+         searchArr.push(data[i]);
+      }
+   }
+   // a list length of zero is a 'falsey' value 
+   if (searchArr.length) {
+      showPage(searchArr, 1);
+      addPagination(searchArr);
+   } else {
+      // empty out the lists for students and pages
+      document.querySelector('ul.student-list').innerHTML = '';
+      document.querySelector('ul.link-list').innerHTML = '';
+
+      const studentList = document.querySelector('.student-list');
+      const message = document.createElement('h3');
+      message.textContent = 'No results found';
+      studentList.appendChild(message);
+   }
+});
+
