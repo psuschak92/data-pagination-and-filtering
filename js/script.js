@@ -73,7 +73,7 @@ function addPagination(list) {
 }
 
 function displaySearchResult() {
-   searchArr = [];
+   const searchArr = [];
    const searchVal = input.value.toLowerCase();
    // this loop checks if input value exists in the data array
    for(let i = 0; i < data.length; i++) {
