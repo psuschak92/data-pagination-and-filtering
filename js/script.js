@@ -19,7 +19,6 @@ function showPage(list, page) {
                                                       </li>`);
       }
    }
-   
 }
 
 function addPagination(list) {
@@ -49,11 +48,22 @@ addPagination(data);
 const label = document.createElement('label');
 label.htmlFor = 'search';
 label.className = 'student-search';
+
 const input = document.createElement('input');
 input.id = 'search';
 input.placeholder = 'Search by name...';
+input.addEventListener('keyup', event => {
+   displaySearchResult();
+});
+
 const button = document.createElement('button');
 button.type = 'button';
+button.addEventListener('click', event => {
+   if (event.target.tagName === 'BUTTON' || event.target.tagName === 'IMG') {
+      displaySearchResult();
+   }
+});
+
 const img = document.createElement('img');
 img.src='img/icn-search.svg';
 img.alt = 'Search icon';
@@ -62,22 +72,21 @@ button.appendChild(img);
 label.appendChild(button);
 document.querySelector('.header').appendChild(label);
 
-input.addEventListener('keyup', event => {
+function displaySearchResult() {
    searchArr = [];
    const searchVal = input.value.toLowerCase();
 
    // this loop checks if key exists in the data array
-   for(let i = 0; i < data.length; i++){
-      // if search term does exist add to new array
+   for(let i = 0; i < data.length; i++) {
       const title = data[i].name.title.toLowerCase();
       const first = data[i].name.first.toLowerCase();
       const last = data[i].name.last.toLowerCase();
-      
+
       // check for every acceptable search combination and add data object to new array
       const titleFirst = title.concat(' ', first);
       const titleFirstLast = titleFirst.concat(' ', last);
       const firstLast = first.concat(' ', last);
-
+      // if search term does exist add to new array
       if (title.includes(searchVal) || first.includes(searchVal) || last.includes(searchVal)) {
          searchArr.push(data[i]);
       } else if (titleFirst.includes(searchVal)) {
@@ -102,5 +111,5 @@ input.addEventListener('keyup', event => {
       message.textContent = 'No results found';
       studentList.appendChild(message);
    }
-});
+}
 
