@@ -1,6 +1,6 @@
 showPage(data, 1);
 addPagination(data);
-//  lines 4 to 29 provide the search component and functionality
+// this html provides the search component and functionality
 const label = document.createElement('label');
 label.htmlFor = 'search';
 label.className = 'student-search';
