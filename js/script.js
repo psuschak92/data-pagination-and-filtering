@@ -8,9 +8,7 @@ label.className = 'student-search';
 const input = document.createElement('input');
 input.id = 'search';
 input.placeholder = 'Search by name...';
-input.addEventListener('keyup', event => {
-   displaySearchResult();
-});
+input.addEventListener('keyup', displaySearchResult);
 
 const button = document.createElement('button');
 button.type = 'button';
@@ -75,7 +73,7 @@ function addPagination(list) {
 function displaySearchResult() {
    const searchArr = [];
    const searchVal = input.value.toLowerCase();
-   // this loop checks if input value exists in the data array
+   // checks if input value exists in the data array
    for(let i = 0; i < data.length; i++) {
       const title = data[i].name.title.toLowerCase();
       const first = data[i].name.first.toLowerCase();
