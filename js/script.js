@@ -1,6 +1,6 @@
 showPage(data, 1);
 addPagination(data);
-// this html provides the search component and functionality
+// the label tag and it's children provide the search component and functionality
 const label = document.createElement('label');
 label.htmlFor = 'search';
 label.className = 'student-search';
@@ -12,11 +12,7 @@ input.addEventListener('keyup', displaySearchResult);
 
 const button = document.createElement('button');
 button.type = 'button';
-button.addEventListener('click', event => {
-   if (event.target.tagName === 'BUTTON' || event.target.tagName === 'IMG') {
-      displaySearchResult();
-   }
-});
+button.addEventListener('click', event => { if (event.target.tagName === 'BUTTON' || event.target.tagName === 'IMG') { displaySearchResult(); }});
 
 const img = document.createElement('img');
 img.src='img/icn-search.svg';
@@ -35,16 +31,18 @@ function showPage(list, page) {
 
    for (let i = startIndex; i < endIndex; i++) {
       if (list[i]){
-         studentList.insertAdjacentHTML('beforeend', `<li class="student-item cf">
-                                                        <div class="student-details">
-                                                          <img class="avatar" src="${list[i].picture.large}" alt="Profile Picture">
-                                                          <h3>${list[i].name.first} ${list[i].name.last}</h3>
-                                                          <span class="email">${list[i].email}</span>
-                                                        </div>
-                                                        <div class="joined-details">
-                                                          <span class="date">Joined ${list[i].registered.date}</span>
-                                                        </div>
-                                                      </li>`);
+         studentList.insertAdjacentHTML('beforeend', `
+            <li class="student-item cf">
+               <div class="student-details">
+                  <img class="avatar" src="${list[i].picture.large}" alt="Profile Picture">
+                  <h3>${list[i].name.first} ${list[i].name.last}</h3>
+                  <span class="email">${list[i].email}</span>
+               </div>
+               <div class="joined-details">
+                  <span class="date">Joined ${list[i].registered.date}</span>
+               </div>
+            </li>
+         `);
       }
    }
 }
@@ -57,8 +55,9 @@ function addPagination(list) {
    for (let pageNum = 1; pageNum <= numOfPages; pageNum++){
       linkList.insertAdjacentHTML('beforeend',`<li><button type="button">${pageNum}</button></li>`);
    }
-
-   linkList.firstElementChild.firstElementChild.className = 'active';
+   // add active class to first pagination button by default
+   linkList.querySelector('li button').className = 'active';
+   // change the active class to the button being clicked
    linkList.addEventListener('click', event => {
       if (event.target.tagName === 'BUTTON') {
          const prevButton = document.querySelector('.active');
