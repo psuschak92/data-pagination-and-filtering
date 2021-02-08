@@ -1,2 +1,2 @@
 # techdegree_unit_2
- Data Pagination and Filtering
+a directory that displays several “pages” of student data that the user can easily navigate and view
